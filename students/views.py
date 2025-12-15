@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
+#for web endpoint
 def students(request):
     students=[
         {'id':1,'name':'John Doe','age':25}
