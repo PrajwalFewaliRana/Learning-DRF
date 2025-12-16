@@ -5,5 +5,7 @@ urlpatterns = [
     path('students/<int:pk>/',views.studentDetailView),
     
     #classbased view
-    path('employees/',views.Employees.as_view())
+    path('employees/',views.Employees.as_view()),
+    path('employees/<int:pk>/',views.EmployeeDetail.as_view()),
+
 ]

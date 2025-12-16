@@ -1,5 +1,7 @@
 # from django.http import HttpResponse,JsonResponse
 # from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from students.models import Student
 from .serializers import StudentSerializer,EmployeeSerializer
 from rest_framework.response import Response
@@ -7,6 +9,7 @@ from rest_framework import status
 from rest_framework.decorators import  api_view
 from rest_framework.views import APIView
 from employees.models import Employee
+from rest_framework.generics import RetrieveAPIView
 
 # Create your views here.
 #for api endpoint
@@ -48,8 +51,67 @@ def studentDetailView(request,pk):
             
 
 #class based view
+#apiview has inbuild methods for get ,put,delete
 class Employees(APIView):
     def get(self,request):
         employees = Employee.objects.all()
         serializer = EmployeeSerializer(employees,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    def post(self,request):
+        serializer = EmployeeSerializer(data= request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST) 
+
+class EmployeeDetail(APIView):
+    
+    def get_object(self,pk):
+        try:
+            return Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            raise Http404
+    
+    def get(self,request,pk):
+        employee = self.get_object(pk)
+        serializer=EmployeeSerializer(employee)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+        
+    
+    #best method
+    # def get(self, request, pk):
+    #     employee = get_object_or_404(Employee, pk=pk)
+    #     serializer = EmployeeSerializer(employee)
+    #     return Response(serializer.data)
+    
+    def put(self,request,pk):
+        employee= get_object_or_404(Employee,pk=pk)
+        serializer = EmployeeSerializer(employee,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,request,pk):
+        employee = get_object_or_404(Employee,pk=pk)
+        employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        
+
+
+#bestest method to retrieve employee detail method get, to put/update +get we use RetrieveUpdateAPIView
+# class EmployeeDetail(RetrieveAPIView):
+#     queryset = Employee.objects.all()
+#     serializer_class = EmployeeSerializer
+
+
+
+
+#for full Crud we use modelviewset
+# from rest_framework.viewsets import ModelViewSet
+
+# class EmployeeViewSet(ModelViewSet):
+#     queryset = Employee.objects.all()
+#     serializer_class = EmployeeSerializer
