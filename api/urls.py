@@ -16,6 +16,10 @@ urlpatterns = [
     # path('employees/<int:pk>/',views.EmployeeDetail.as_view()),
     
     #viewset
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path('blogs/',views.blogView.as_view()),
+    path('comments/',views.commentView.as_view()),
+    path('blogs/<int:pk>/',views.blogDetailView.as_view()),
+    path('comments/<int:pk>/',views.commentDetailView.as_view()),
 
 ]
