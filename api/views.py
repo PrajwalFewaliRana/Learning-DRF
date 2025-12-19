@@ -12,7 +12,7 @@ from employees.models import Employee
 from rest_framework import mixins,generics,viewsets
 from blogs.models import Blog,Comment
 from blogs.serializer import BlogSerializer,CommentSerializer
-
+from .pagination import CustomPagination
 # Create your views here.
 #for api endpoint
 
@@ -190,6 +190,7 @@ class EmployeeViewSet(viewsets.ViewSet):
 class EmployeeViwSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class=EmployeeSerializer
+    pagination_class=CustomPagination
     
     
 class blogView(generics.ListCreateAPIView):
