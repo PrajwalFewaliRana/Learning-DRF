@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'api',
     'employees',
     'blogs',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +128,9 @@ REST_FRAMEWORK={
     # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE':2,
+    
+    #global filters => it cannot handle lowercase so we use custom filter
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 #custom pagination for mixins and apiview
