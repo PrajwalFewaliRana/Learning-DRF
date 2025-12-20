@@ -130,7 +130,12 @@ REST_FRAMEWORK={
     'PAGE_SIZE':2,
     
     #global filters => it cannot handle lowercase so we use custom filter
-    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],
+    
+    #initially it shows ?search=blog1 after it,it will show ?q=blog1
+    'SEARCH_PARAM':'q',
+    
+    'ORDERING_PARAM':'order-by',
 }
 
 #custom pagination for mixins and apiview
